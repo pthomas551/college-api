@@ -15,7 +15,15 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from rest_framework.urlpatterns import format_suffix_patterns
+from api import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^colleges/$', views.CollegeList.as_view()),
+    url(r'^colleges/(?P<pk>[0-9]+)/$', views.CollegeDetail.as_view()),
+    url(r'^attributes/$', views.AttributeList.as_view()),
+    url(r'^attributes/(?P<pk>[0-9]+)/$', views.AttributeDetail.as_view()),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)

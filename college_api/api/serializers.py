@@ -7,6 +7,7 @@ class CollegeSerializer(serializers.ModelSerializer):
         model = College
         fields = ('id', 'name', 'size')
 
+
 class AttributeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attribute
