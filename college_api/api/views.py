@@ -66,7 +66,6 @@ class UserCollegeListModifyRetrieve(generics.ListAPIView):
         return queryset
 
     def put(self, request, format=None, **kwargs):
-        print request.data
         user_id = self.kwargs['pk']
         user = get_object_or_404(User, pk=user_id)
         college_pk = request.data['pk']
