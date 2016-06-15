@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models import Attribute, College
+from api.models import Attribute, College, User
 
 
 class AttributeSerializer(serializers.ModelSerializer):
@@ -14,3 +14,11 @@ class CollegeSerializer(serializers.ModelSerializer):
     class Meta:
         model = College
         fields = ('id', 'name', 'size', 'attributes')
+
+
+class UserSerializer(serializers.ModelSerializer):
+    colleges = CollegeSerializer(many=True)
+
+    class Meta:
+        model = User
+        fields = ('id', 'name')

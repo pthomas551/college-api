@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^colleges/(?P<college_pk>[0-9]+)/attributes$', views.CollegeAttributeAdd.as_view()),
     url(r'^attributes/$', views.AttributeList.as_view()),
     url(r'^attributes/(?P<pk>[0-9]+)/$', views.AttributeDetail.as_view()),
+    url(r'^users/(?P<pk>[0-9]+)/colleges/$', views.UserCollegeList.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

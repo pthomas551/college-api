@@ -1,5 +1,5 @@
-from api.models import College, Attribute
-from api.serializers import CollegeSerializer, AttributeSerializer
+from api.models import College, Attribute, User
+from api.serializers import CollegeSerializer, AttributeSerializer, UserSerializer
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -25,7 +25,8 @@ class CollegeDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class CollegeAttributeAdd(APIView):
     """
-    Add a pre-existing attribute to a college.
+    Add a pre-existing attribute to a college. Returns 404 if attribute
+    does not exist.
     """
     def put(self, request, format=None, **kwargs):
         college = get_object_or_404(College, pk=kwargs['college_pk'])
@@ -34,7 +35,7 @@ class CollegeAttributeAdd(APIView):
         college.attributes.add(attribute)
         college.save()
         return Response(status=status.HTTP_200_OK)
-        
+
 
 class AttributeList(generics.ListCreateAPIView):
     """
@@ -50,3 +51,16 @@ class AttributeDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = Attribute.objects.all()
     serializer_class = AttributeSerializer
+
+
+class UserCollegeList(generics.ListAPIView):
+    """
+    Retrieve a user's college list.
+    """
+    serializer_class = CollegeSerializer
+
+    def get_queryset(self):
+        user_id = self.kwargs['pk']
+        user = get_object_or_404(User, pk=user_id)
+        queryset = user.colleges
+        return queryset
