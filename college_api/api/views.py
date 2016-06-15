@@ -1,5 +1,5 @@
 from api.models import College, Attribute, User
-from api.serializers import CollegeSerializer, AttributeSerializer, UserSerializer
+from api.serializers import CollegeSerializer, AttributeSerializer
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -53,9 +53,9 @@ class AttributeDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AttributeSerializer
 
 
-class UserCollegeList(generics.ListAPIView):
+class UserCollegeListModifyRetrieve(generics.ListAPIView):
     """
-    Retrieve a user's college list.
+    Retrieve and modify a user's college list.
     """
     serializer_class = CollegeSerializer
 
@@ -64,3 +64,22 @@ class UserCollegeList(generics.ListAPIView):
         user = get_object_or_404(User, pk=user_id)
         queryset = user.colleges
         return queryset
+
+    def put(self, request, format=None, **kwargs):
+        print request.data
+        user_id = self.kwargs['pk']
+        user = get_object_or_404(User, pk=user_id)
+        college_pk = request.data['pk']
+        college = get_object_or_404(College, pk=college_pk)
+        user.colleges.add(college)
+        user.save()
+        return Response(status=status.HTTP_200_OK)
+
+    def delete(self, request, format=None, **kwargs):
+        user_id = self.kwargs['pk']
+        user = get_object_or_404(User, pk=user_id)
+        college_pk = request.data['pk']
+        college = get_object_or_404(user.colleges, pk=college_pk)
+        user.colleges.remove(college)
+        user.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
